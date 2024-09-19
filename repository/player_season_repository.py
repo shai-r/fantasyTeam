@@ -5,6 +5,9 @@ from models.PlayerSeason import PlayerSeason
 from repository.database import get_db_connection
 from typing import List, Optional
 
+from repository.team_players_repository import delete_team_player_by_player_id
+
+
 def create_player_season_if_not_exists(player_season: PlayerSeason) -> int:
     player_s = pipe(
         get_all_player_season_by_player_id(player_season.player_id),
@@ -83,6 +86,7 @@ def delete_player_season(psid: int):
 
 
 def delete_player_season_by_player_id(pid: int):
+    delete_team_player_by_player_id(pid)
     from repository import get_player_by_id
 
     if get_player_by_id(pid) == None:

@@ -42,36 +42,35 @@ def create_teams_table():
         cursor.execute('''
             CREATE TABLE IF NOT EXISTS teams (
             id SERIAL PRIMARY KEY,
-            season INTEGER NOT NULL,
-            C_id INTEGER NOT NULL,
-            SG_id INTEGER NOT NULL,
-            SF_id INTEGER NOT NULL,
-            PF_id INTEGER NOT NULL,
-            PG_id INTEGER NOT NULL,
-            FOREIGN KEY (C_id) 
-                REFERENCES player_seasons(id) 
-                    ON DELETE CASCADE,
-            FOREIGN KEY (SG_id) 
-                REFERENCES player_seasons(id) 
-                    ON DELETE CASCADE,
-            FOREIGN KEY (SF_id) 
-                REFERENCES player_seasons(id) 
-                    ON DELETE CASCADE,
-            FOREIGN KEY (PF_id) 
-                REFERENCES player_seasons(id) 
-                    ON DELETE CASCADE,
-            FOREIGN KEY (PG_id) 
-                REFERENCES player_seasons(id) 
-                    ON DELETE CASCADE
+            team_name VARCHAR(16) NOT NULL,
+            season INTEGER
             )
         ''')
     connection.commit()
 
+def create_team_players_table():
+    with get_db_connection() as connection, connection.cursor() as cursor:
+        cursor.execute('''
+            CREATE TABLE IF NOT EXISTS team_players (
+                id SERIAL PRIMARY KEY,
+                team_id INTEGER NOT NULL,
+                player_id INTEGER NOT NULL,
+                position VARCHAR(16) NOT NULL,
+                FOREIGN KEY (player_id)
+                    REFERENCES player_seasons(id)
+                        ON DELETE CASCADE,
+                FOREIGN KEY (team_id)
+                    REFERENCES teams(id)
+                        ON DELETE CASCADE
+            )
+    ''')
+    connection.commit()
 
 def create_all_tables():
     create_players_table()
     create_player_seasons_table()
     create_teams_table()
+    create_team_players_table()
 
 def drop_players_table():
     with get_db_connection() as connection, connection.cursor() as cursor:
@@ -89,7 +88,13 @@ def drop_teams_table():
         cursor.execute("DROP TABLE IF EXISTS teams")
         connection.commit()
 
+def drop_team_players_table():
+    with get_db_connection() as connection, connection.cursor() as cursor:
+        cursor.execute("DROP TABLE IF EXISTS players_table")
+        connection.commit()
+
 def drop_all_tables():
+    drop_team_players_table()
     drop_teams_table()
     drop_player_seasons_table()
     drop_players_table()
