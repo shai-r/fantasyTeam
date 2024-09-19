@@ -10,8 +10,8 @@ def create_players_table():
         cursor.execute('''
             CREATE TABLE IF NOT EXISTS players (
             id SERIAL PRIMARY KEY,
-            api_id INTEGER NOT NULL,
-            name VARCHAR(255) NOT NULL
+            api_id VARCHAR(16) NOT NULL,
+            player_name VARCHAR(32) NOT NULL
             )
         ''')
     connection.commit()
@@ -22,15 +22,14 @@ def create_player_seasons_table():
             CREATE TABLE IF NOT EXISTS player_seasons (
                 id SERIAL PRIMARY KEY,
                 player_id INTEGER NOT NULL,
-                team VARCHAR(255) NOT NULL,
-                position INTEGER NOT NULL,
+                team VARCHAR(8) NOT NULL,
+                position VARCHAR(16) NOT NULL,
                 season INTEGER NOT NULL,
                 points INTEGER NOT NULL,
                 games INTEGER NOT NULL,
-                two_percent FLOUT NOT NULL,
-                three_percent FLOUT NOT NULL,
-                atr FLOUT NOT NULL,
-                ppg FLOUT NOT NULL,
+                two_percent FLOAT NOT NULL,
+                three_percent FLOAT NOT NULL,
+                atr FLOAT NOT NULL,
                 FOREIGN KEY (player_id) 
                     REFERENCES players(id) 
                         ON DELETE CASCADE
@@ -49,21 +48,18 @@ def create_teams_table():
             SF_id INTEGER NOT NULL,
             PF_id INTEGER NOT NULL,
             PG_id INTEGER NOT NULL,
-            FOREIGN KEY (player_id) 
-                REFERENCES player_seasons(id) 
-                    ON DELETE CASCADE,
             FOREIGN KEY (C_id) 
                 REFERENCES player_seasons(id) 
                     ON DELETE CASCADE,
             FOREIGN KEY (SG_id) 
                 REFERENCES player_seasons(id) 
-                    ON DELETE CASCADE
+                    ON DELETE CASCADE,
             FOREIGN KEY (SF_id) 
                 REFERENCES player_seasons(id) 
-                    ON DELETE CASCADE
+                    ON DELETE CASCADE,
             FOREIGN KEY (PF_id) 
                 REFERENCES player_seasons(id) 
-                    ON DELETE CASCADE
+                    ON DELETE CASCADE,
             FOREIGN KEY (PG_id) 
                 REFERENCES player_seasons(id) 
                     ON DELETE CASCADE
