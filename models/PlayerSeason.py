@@ -13,3 +13,4 @@ class PlayerSeason:
     three_percent: float
     atr: float
     ppg: float
+    id: int = None

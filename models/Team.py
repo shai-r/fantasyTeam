@@ -2,9 +2,10 @@ from dataclasses import dataclass
 
 @dataclass
 class Team:
-    team_id: int
-    C: int
-    SG: int
-    SF: int
-    PF: int
-    PG: int
+    season: int
+    C_id: int
+    SG_id: int
+    SF_id: int
+    PF_id: int
+    PG_id: int
+    id: int = None
