@@ -3,6 +3,7 @@ from typing import List
 
 @dataclass
 class PlayerDto:
+    player_id: int
     playerName: str
     team: str
     position: str

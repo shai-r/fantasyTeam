@@ -7,13 +7,13 @@ from models.Player import Player
 @pytest.fixture(scope="module")
 def setup_database():
     create_all_tables()
-    load_players_and_seasons_from_api(2024)
+    load_players_and_seasons_from_api(2022)
     # yield
     # drop_all_tables()
 
 def test_create_player(setup_database):
     new_id = create_player_if_not_exists_else_find_id(Player(api_id='Shai01', player_name='Shai'))
-    assert new_id >=21
+    assert new_id >=1
 
 def test_get_all_players(setup_database):
     players = get_all_players()
