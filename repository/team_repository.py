@@ -56,7 +56,7 @@ def update_team(tid: int, team: Team) -> Team:
 def delete_team(tid: int):
     delete_team_player_by_team_id(tid)
     if get_team_by_id(tid) == None:
-        return False
+        return None
     with get_db_connection() as connection, connection.cursor() as cursor:
         cursor.execute("DELETE FROM teams WHERE id = %s", (tid,))
         connection.commit()
