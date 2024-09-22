@@ -1,13 +1,14 @@
 from dataclasses import asdict
 from toolz import *
 from flask import Blueprint, jsonify, request
-
+from typing import List
 from dto.CreateTeamDto import CreateTeamDto
 from dto.ResponseDto import ResponseDto
 from dto.TeamDto import TeamDto
+from dto.UpdateTeamDto import UpdateTeamDto
 from models.TeamPlayers import TeamPlayers
 from repository.team_repository import delete_team
-from service.team_service import create_team, convert_from_team_id_to_team_dto
+from service.team_service import create_team, convert_from_team_id_to_team_dto, update_team, get_all_teams_compare
 
 teams_blueprint = Blueprint("teams", __name__)
 
@@ -28,20 +29,18 @@ def delete(team_id):
     is_deleted = delete_team(team_id)
     return (jsonify(asdict(ResponseDto(message=is_deleted))), 200) if is_deleted else(
         (jsonify(asdict(ResponseDto(message='not found'))), 404))
-# @teams_blueprint.route("/", methods=['GET'])
-# def all_teams():
-#     args = request.args
-#     position = args['position']
-#     season = args['season'] if 'season' in args.keys()  else 0
-#     return jsonify(asdict(ResponseDto(body=convert_player_to_player_dto('C', 0)))), 200
 
-#
-#
+@teams_blueprint.route("/<int:team_id>", methods=['PUT'])
+def update(team_id):
+    update = update_team(team_id, UpdateTeamDto(**request.json))
+    return ((jsonify(asdict(ResponseDto(body=update))), 201) if update else
+            (jsonify(asdict(ResponseDto(error='not found'))), 404))
 
-#
-# @user_blueprint.route("/update/<int:user_id>", methods=['PUT'])
-# def update(user_id):
-#     user = update_user(user_id, User(**request.json))
-#     return ((jsonify(asdict(ResponseDto(body=user))), 201) if user else
-#             (jsonify(asdict(ResponseDto(error='not found'))), 404))
-#
+@teams_blueprint.route("/compare", methods=['GET'])
+def compare():
+    args = request.args
+    teams = [v for k, v in args.items() if k.startswith("team")]
+    team_ids = list(map(lambda tid: int(tid),teams))
+    teams_compare = get_all_teams_compare(team_ids)
+    return ((jsonify(asdict(ResponseDto(body=teams_compare))), 200) if teams_compare else
+            (jsonify(asdict(ResponseDto(error='not found'))), 404))

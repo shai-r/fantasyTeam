@@ -1,5 +1,5 @@
 from repository.database import drop_team_players_table, drop_teams_table, create_teams_table, create_team_players_table
-from service.team_service import create_team, convert_from_team_id_to_team_dto
+from service.team_service import create_team, convert_from_team_id_to_team_dto, get_all_teams_compare
 from models.TeamPlayers import TeamPlayers
 
 def test_create_team():
@@ -38,3 +38,7 @@ def test_create_team():
 def test_convert_from_team_and_players_to_team_dto():
     team = convert_from_team_id_to_team_dto(1)
     assert team
+
+def test_get_all_teams_compare():
+    teams = get_all_teams_compare([3,2])
+    assert True

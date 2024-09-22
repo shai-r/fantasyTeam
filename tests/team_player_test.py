@@ -28,7 +28,7 @@ def test_get_all_team_players_by_player_id(setup_database):
     assert team_players
 
 def test_get_team_player_by_id(setup_database):
-    team_players = get_team_player_by_id(1)
+    team_players = get_team_player_by_id(2)
     assert team_players.id == 1
 
 def test_update_team_player(setup_database):
